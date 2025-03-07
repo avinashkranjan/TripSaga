@@ -1,13 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Loader2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import axios from "@/api/axios";
+import { Label } from "@/components/ui/label";
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
   const contactInfo = [
     {
       icon: MapPin,
@@ -30,6 +43,33 @@ export default function Contact() {
       details: ["Monday - Friday: 9AM - 6PM", "Saturday: 10AM - 4PM"],
     },
   ];
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await axios.post("/contact", formData);
+
+      if (response.status === 201) {
+        toast.success("Message sent successfully!");
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      } else {
+        toast.error("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.warn(error);
+      toast.error("Network error! Please check your connection.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen pt-20 bg-gray-50 dark:bg-gray-900">
@@ -57,15 +97,65 @@ export default function Contact() {
           >
             <Card className="p-6">
               <h2 className="text-2xl font-semibold mb-6">Send us a Message</h2>
-              <div className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input placeholder="Your Name" />
-                  <Input placeholder="Your Email" type="email" />
+                  <div>
+                    <Label htmlFor="name">
+                      Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      name="name"
+                      placeholder="Your Name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">
+                      Email <span className="text-red-500">*</span>
+                    </Label>
+
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Your Email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
                 </div>
-                <Input placeholder="Subject" />
-                <Textarea placeholder="Your Message" className="h-32" />
-                <Button className="w-full">Send Message</Button>
-              </div>
+                <div>
+                  <Label htmlFor="phone">
+                    Phone <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    name="phone"
+                    placeholder="Your Phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="message">
+                    Message <span className="text-red-500">*</span>
+                  </Label>
+                  <Textarea
+                    name="message"
+                    placeholder="Your Message"
+                    className="h-32"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
             </Card>
           </motion.div>
 
