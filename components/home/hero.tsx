@@ -63,12 +63,13 @@ export default function HeroSection() {
           className="max-w-5xl"
         >
           <motion.h1
-            className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mb-4 text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl section-subtitle"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Discover Your Next <span className="text-primary">Adventure</span>
+            Discover Your Next <br />
+            <span className="text-primary">Adventure</span>
           </motion.h1>
 
           <motion.p
@@ -95,7 +96,7 @@ export default function HeroSection() {
                 Destination
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2  text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="Where to?"
@@ -110,6 +111,7 @@ export default function HeroSection() {
                 <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="date"
+                  placeholder="Select date"
                   className="pl-10 bg-white/20 border-white/20 text-white placeholder:text-white/60"
                 />
               </div>

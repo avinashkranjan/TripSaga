@@ -40,7 +40,9 @@ export default function Contact() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
+          <h1 className="text-4xl text-primary section-subtitle mb-4">
+            Contact Us
+          </h1>
           <p className="text-gray-600 dark:text-gray-300">
             Get in touch with our travel experts
           </p>
